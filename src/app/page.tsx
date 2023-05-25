@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
-import { Clock, Globe, HardDrive, Link2, LogOut } from "react-feather";
+import { Clock, Globe, HardDrive, Link2, LogOut, Box } from "react-feather";
+import moment from "moment";
 
 export default function Home() {
   const [blocks, setBlocks] = useState<any>([]);
@@ -64,8 +65,81 @@ export default function Home() {
     );
   };
 
+  const BoxTable = (props: any) => {
+    return (
+      <div className="bg-white rounded-lg shadow py-4">
+        <div className="border-b text-xs font-bold pb-2 mb-4 px-4">{props.name}</div>
+        {props.blocks.reverse().map((item: any, i: number) => (
+          <div className="flex my-1 text-sm border-b pb-4 px-4 mx-4" key={i}>
+            <div className="w-12 h-12 flex justify-center items-center mr-4 rounded-xl bg-gray-100 ">
+              <Box className="text-gray-500"></Box>
+            </div>
+            <div className="w-3/12">
+              <div className="text-blue-600">{item.block}</div>
+              <div className="text-xs text-gray-600 mt-2">
+                {moment(item.timestamp).fromNow()}
+              </div>
+            </div>
+            <div className="w-5/12 ">
+              <div>
+                Fee Recipient <span className="text-blue-600">Bulevard</span>
+              </div>
+              <div className="text-blue-600">
+                164 TXNS 
+                <span className="text-xs text-gray-500">in 12 sec</span>
+              </div>
+            </div>
+            <div className="flex-1">
+              <div className="flex justify-end mt-2">
+                <div className="border  rounded-md px-2 text-xs text-gray-700 font-bold py-1">
+                  0.1323 Bjs
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+  const TransactionTable = (props: any) => {
+    return (
+      <div className="bg-white rounded-lg shadow py-4">
+        <div className="border-b text-xs font-bold pb-2 mb-4 px-4">{props.name}</div>
+        {props.blocks.reverse().map((item: any, i: number) => (
+          <div className="flex my-1 text-sm border-b pb-4 px-4 mx-4" key={i}>
+            <div className="w-12 h-12 flex justify-center items-center mr-4 rounded-xl bg-gray-100 ">
+              <Box className="text-gray-500"></Box>
+            </div>
+            <div className="w-3/12">
+              <div className="text-blue-600">{item.block}</div>
+              <div className="text-xs text-gray-600 mt-2">
+                {moment(item.timestamp).fromNow()}
+              </div>
+            </div>
+            <div className="w-5/12 ">
+              <div>
+                Fee Recipient <span className="text-blue-600">Bulevard</span>
+              </div>
+              <div className="text-blue-600">
+                164 TXNS 
+                <span className="text-xs text-gray-500">in 12 sec</span>
+              </div>
+            </div>
+            <div className="flex-1">
+              <div className="flex justify-end mt-2">
+                <div className="border  rounded-md px-2 text-xs text-gray-700 font-bold py-1">
+                  0.1323 Bjs
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
-    <main className="">
+    <main className="bg-gray-100 h-screen">
       <div className="flex px-8 py-2 text-xs text-gray-700 bg-white border-b justify-between">
         <div>
           BJS Price: <span className="text-teal-500">$1.2 (+0.59%)</span>
@@ -79,7 +153,12 @@ export default function Home() {
         ></input>
       </div>
       <TopBlock></TopBlock>
-      <table className="table table-auto max-w-lg m-auto text-left">
+      <div className="grid grid-cols-2 gap-4 px-8 mt-4">
+        <BoxTable name="Latest Blocks" blocks={blocks}></BoxTable>
+        <TransactionTable name="Latest Transactions" blocks={blocks}></TransactionTable>
+        {/* <TransactionTable name="Latest Transactions"></TransactionTable> */}
+      </div>
+      {/* <table className="table table-auto max-w-lg m-auto text-left">
         <thead>
           <th>Timestamp</th>
           <th>Hash</th>
@@ -110,7 +189,7 @@ export default function Home() {
             );
           })}
         </tbody>
-      </table>
+      </table> */}
     </main>
   );
 }
