@@ -26,8 +26,8 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="space-y-3">
-      <table className="table table-auto w-full">
+    <main className="space-y-3 grid h-screen w-screen">
+      <table className="table table-auto max-w-lg m-auto text-left">
         <thead>
           <th>Hash</th>
           <th>Previous Hash</th>
@@ -40,11 +40,22 @@ export default function Home() {
             return (
               <tr key={i} className="text-sm ">
                 <td>
-                  <span className=" truncate"> {item.hash}</span>
+                  <span className="block w-32 truncate"> {item.timestamp}</span>
                 </td>
-                <td>{item.previousHash}</td>
-                <td>{item.difficulty}</td>
-                <td>{item.timestamp}</td>
+                <td>
+                  <span className="block w-32 truncate"> {item.hash}</span>
+                </td>
+                <td>
+                  <span className="block w-32 truncate">
+                    {item.previousHash}
+                  </span>
+                </td>
+                <td>
+                  <span className="block w-32 truncate">{item.difficulty}</span>
+                </td>
+                <td>
+                  <span className="block w-32 truncate">{item.difficulty}</span>
+                </td>
                 <td>{item.nonce}</td>
               </tr>
             );
