@@ -29,11 +29,11 @@ export default function Home() {
     <main className="space-y-3 grid h-screen w-screen">
       <table className="table table-auto max-w-lg m-auto text-left">
         <thead>
+          <th>Timestamp</th>
           <th>Hash</th>
           <th>Previous Hash</th>
-          <th>Timestamp</th>
-          <th>Block</th>
           <th>Difficulty</th>
+          <th>Nonce</th>
         </thead>
         <tbody>
           {blocks.map((item: any, i: number) => {
@@ -49,9 +49,6 @@ export default function Home() {
                   <span className="block w-32 truncate">
                     {item.previousHash}
                   </span>
-                </td>
-                <td>
-                  <span className="block w-32 truncate">{item.difficulty}</span>
                 </td>
                 <td>
                   <span className="block w-32 truncate">{item.difficulty}</span>
