@@ -2,7 +2,15 @@
 
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
-import { Clock, Globe, HardDrive, Link2, LogOut, Box } from "react-feather";
+import {
+  Clock,
+  Globe,
+  HardDrive,
+  Link2,
+  LogOut,
+  Box,
+  FileText,
+} from "react-feather";
 import moment from "moment";
 
 export default function Home() {
@@ -68,7 +76,9 @@ export default function Home() {
   const BoxTable = (props: any) => {
     return (
       <div className="bg-white rounded-lg shadow py-4">
-        <div className="border-b text-xs font-bold pb-2 mb-4 px-4">{props.name}</div>
+        <div className="border-b text-xs font-bold pb-2 mb-4 px-4">
+          {props.name}
+        </div>
         {props.blocks.reverse().map((item: any, i: number) => (
           <div className="flex my-1 text-sm border-b pb-4 px-4 mx-4" key={i}>
             <div className="w-12 h-12 flex justify-center items-center mr-4 rounded-xl bg-gray-100 ">
@@ -85,7 +95,7 @@ export default function Home() {
                 Fee Recipient <span className="text-blue-600">Bulevard</span>
               </div>
               <div className="text-blue-600">
-                164 TXNS 
+                164 TXNS
                 <span className="text-xs text-gray-500">in 12 sec</span>
               </div>
             </div>
@@ -104,25 +114,32 @@ export default function Home() {
   const TransactionTable = (props: any) => {
     return (
       <div className="bg-white rounded-lg shadow py-4">
-        <div className="border-b text-xs font-bold pb-2 mb-4 px-4">{props.name}</div>
+        <div className="border-b text-xs font-bold pb-2 mb-4 px-4">
+          {props.name}
+        </div>
         {props.blocks.reverse().map((item: any, i: number) => (
           <div className="flex my-1 text-sm border-b pb-4 px-4 mx-4" key={i}>
             <div className="w-12 h-12 flex justify-center items-center mr-4 rounded-xl bg-gray-100 ">
-              <Box className="text-gray-500"></Box>
+              <FileText className="text-gray-500"></FileText>
             </div>
             <div className="w-3/12">
-              <div className="text-blue-600">{item.block}</div>
+              <div className="text-blue-600 truncate w-32">{item.hash}</div>
               <div className="text-xs text-gray-600 mt-2">
                 {moment(item.timestamp).fromNow()}
               </div>
             </div>
             <div className="w-5/12 ">
-              <div>
-                Fee Recipient <span className="text-blue-600">Bulevard</span>
+              <div className="flex space-x-2">
+                <span>From</span>
+                <span className="text-blue-600 w-64 truncate block">
+                  {item.hash}
+                </span>
               </div>
-              <div className="text-blue-600">
-                164 TXNS 
-                <span className="text-xs text-gray-500">in 12 sec</span>
+              <div className="flex space-x-2">
+                <span>To</span>
+                <span className="text-blue-600 w-64 truncate block">
+                  {item.hash}
+                </span>
               </div>
             </div>
             <div className="flex-1">
@@ -155,7 +172,10 @@ export default function Home() {
       <TopBlock></TopBlock>
       <div className="grid grid-cols-2 gap-4 px-8 mt-4">
         <BoxTable name="Latest Blocks" blocks={blocks}></BoxTable>
-        <TransactionTable name="Latest Transactions" blocks={blocks}></TransactionTable>
+        <TransactionTable
+          name="Latest Transactions"
+          blocks={blocks}
+        ></TransactionTable>
         {/* <TransactionTable name="Latest Transactions"></TransactionTable> */}
       </div>
       {/* <table className="table table-auto max-w-lg m-auto text-left">
