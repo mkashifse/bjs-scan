@@ -80,7 +80,7 @@ export default function Home() {
           {props.name}
         </div>
         {props.blocks.reverse().map((item: any, i: number) => (
-          <div className="flex my-1 text-sm border-b pb-4 px-4 mx-4" key={i}>
+          <div className="flex mt-3 text-sm border-b pb-4 px-4 mx-4" key={i}>
             <div className="w-12 h-12 flex justify-center items-center mr-4 rounded-xl bg-gray-100 ">
               <Box className="text-gray-500"></Box>
             </div>
@@ -118,7 +118,7 @@ export default function Home() {
           {props.name}
         </div>
         {props.blocks.reverse().map((item: any, i: number) => (
-          <div className="flex my-1 text-sm border-b pb-4 px-4 mx-4" key={i}>
+          <div className="flex mt-3 text-sm border-b pb-4 px-4 mx-4" key={i}>
             <div className="w-12 h-12 flex justify-center items-center mr-4 rounded-xl bg-gray-100 ">
               <FileText className="text-gray-500"></FileText>
             </div>
