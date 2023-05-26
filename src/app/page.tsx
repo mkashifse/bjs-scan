@@ -15,21 +15,29 @@ import moment from "moment";
 
 export default function Home() {
   const [blocks, setBlocks] = useState<any>([]);
+  const [tnx, setTnx] = useState<any>([]);
 
   useEffect(() => {
     const socket = io("http://localhost:3000");
 
     // load initially
-    fetch("http://localhost:3000/api/v1/blocks")
+    fetch("http://localhost:3000/api/v1/data")
       .then((resp) => resp.json())
-      .then((resp) => {
-        setBlocks(resp.blocks);
+      .then((data) => {
+        const { blocks, transactions } = data;
+        setBlocks(blocks);
+        setTnx(transactions);
       });
 
-    // subscription
-    socket.on("NEW_BLOCK", (data) => {
+    //  subscription
+    socket.on("NEW_BLK", (data) => {
       const bl = JSON.parse(data);
       setBlocks(bl);
+    });
+
+    socket.on("NEW_TNX", (data) => {
+      const tnx = JSON.parse(data);
+      setTnx(tnx);
     });
 
     return () => socket.disconnect();
@@ -79,35 +87,38 @@ export default function Home() {
         <div className="border-b text-xs font-bold pb-2 mb-4 px-4">
           {props.name}
         </div>
-        {props.blocks.reverse().map((item: any, i: number) => (
-          <div className="flex mt-3 text-sm border-b pb-4 px-4 mx-4" key={i}>
-            <div className="w-12 h-12 flex justify-center items-center mr-4 rounded-xl bg-gray-100 ">
-              <Box className="text-gray-500"></Box>
-            </div>
-            <div className="w-3/12">
-              <div className="text-blue-600">{item.block}</div>
-              <div className="text-xs text-gray-600 mt-2">
-                {moment(item.timestamp).fromNow()}
+        {props.blocks
+          .reverse()
+          .slice(0, 10)
+          .map((item: any, i: number) => (
+            <div className="flex mt-3 text-sm border-b pb-4 px-4 mx-4" key={i}>
+              <div className="w-12 h-12 flex justify-center items-center mr-4 rounded-xl bg-gray-100 ">
+                <Box className="text-gray-500"></Box>
               </div>
-            </div>
-            <div className="w-5/12 ">
-              <div>
-                Fee Recipient <span className="text-blue-600">Bulevard</span>
+              <div className="w-3/12">
+                <div className="text-blue-600">{item.block}</div>
+                <div className="text-xs text-gray-600 mt-2">
+                  {moment(item.timestamp).fromNow()}
+                </div>
               </div>
-              <div className="text-blue-600">
-                164 TXNS
-                <span className="text-xs text-gray-500">in 12 sec</span>
+              <div className="w-5/12 ">
+                <div>
+                  Fee Recipient <span className="text-blue-600">Bulevard</span>
+                </div>
+                <div className="text-blue-600">
+                  164 TXNS
+                  <span className="text-xs text-gray-500">in 12 sec</span>
+                </div>
               </div>
-            </div>
-            <div className="flex-1">
-              <div className="flex justify-end mt-2">
-                <div className="border  rounded-md px-2 text-xs text-gray-700 font-bold py-1">
-                  0.1323 Bjs
+              <div className="flex-1">
+                <div className="flex justify-end mt-2">
+                  <div className="border  rounded-md px-2 text-xs text-gray-700 font-bold py-1">
+                    0.1323 Bjs
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     );
   };
@@ -117,40 +128,43 @@ export default function Home() {
         <div className="border-b text-xs font-bold pb-2 mb-4 px-4">
           {props.name}
         </div>
-        {props.blocks.reverse().map((item: any, i: number) => (
-          <div className="flex mt-3 text-sm border-b pb-4 px-4 mx-4" key={i}>
-            <div className="w-12 h-12 flex justify-center items-center mr-4 rounded-xl bg-gray-100 ">
-              <FileText className="text-gray-500"></FileText>
-            </div>
-            <div className="w-3/12">
-              <div className="text-blue-600 truncate w-32">{item.hash}</div>
-              <div className="text-xs text-gray-600 mt-2">
-                {moment(item.timestamp).fromNow()}
+        {props.tnx
+          .reverse()
+          .slice(0, 10)
+          .map((item: any, i: number) => (
+            <div className="flex mt-3 text-sm border-b pb-4 px-4 mx-4" key={i}>
+              <div className="w-12 h-12 flex justify-center items-center mr-4 rounded-xl bg-gray-100 ">
+                <FileText className="text-gray-500"></FileText>
               </div>
-            </div>
-            <div className="w-5/12 ">
-              <div className="flex space-x-2">
-                <span>From</span>
-                <span className="text-blue-600 w-64 truncate block">
-                  {item.hash}
-                </span>
+              <div className="w-3/12">
+                <div className="text-blue-600 truncate w-32">{item.hash}</div>
+                <div className="text-xs text-gray-600 mt-2">
+                  {moment(item.timestamp).fromNow()}
+                </div>
               </div>
-              <div className="flex space-x-2">
-                <span>To</span>
-                <span className="text-blue-600 w-64 truncate block">
-                  {item.hash}
-                </span>
+              <div className="w-5/12 ">
+                <div className="flex space-x-2">
+                  <span>From</span>
+                  <span className="text-blue-600 w-64 truncate block">
+                    {item.from}
+                  </span>
+                </div>
+                <div className="flex space-x-2">
+                  <span>To</span>
+                  <span className="text-blue-600 w-64 truncate block">
+                    {item.to}
+                  </span>
+                </div>
               </div>
-            </div>
-            <div className="flex-1">
-              <div className="flex justify-end mt-2">
-                <div className="border  rounded-md px-2 text-xs text-gray-700 font-bold py-1">
-                  0.1323 Bjs
+              <div className="flex-1">
+                <div className="flex justify-end mt-2">
+                  <div className="border  rounded-md px-2 text-xs text-gray-700 font-bold py-1">
+                    {item.value} Bjs
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     );
   };
@@ -174,7 +188,7 @@ export default function Home() {
         <BoxTable name="Latest Blocks" blocks={blocks}></BoxTable>
         <TransactionTable
           name="Latest Transactions"
-          blocks={blocks}
+          tnx={tnx}
         ></TransactionTable>
         {/* <TransactionTable name="Latest Transactions"></TransactionTable> */}
       </div>
