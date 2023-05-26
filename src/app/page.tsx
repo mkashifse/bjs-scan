@@ -16,17 +16,19 @@ import moment from "moment";
 export default function Home() {
   const [blocks, setBlocks] = useState<any>([]);
   const [tnx, setTnx] = useState<any>([]);
+  const getLatestBlockTnx = () =>
+    blocks.length ? blocks[blocks.length - 1].transactions : [];
 
   useEffect(() => {
     const socket = io("http://localhost:3000");
-
     // load initially
     fetch("http://localhost:3000/api/v1/data")
       .then((resp) => resp.json())
       .then((data) => {
         const { blocks, transactions } = data;
         setBlocks(blocks);
-        setTnx(transactions);
+
+        setTnx([...transactions, ...getLatestBlockTnx()]);
       });
 
     //  subscription
@@ -37,7 +39,7 @@ export default function Home() {
 
     socket.on("NEW_TNX", (data) => {
       const tnx = JSON.parse(data);
-      setTnx(tnx);
+      setTnx([...tnx, ...getLatestBlockTnx()]);
     });
 
     return () => socket.disconnect();
@@ -81,7 +83,7 @@ export default function Home() {
     );
   };
 
-  const BoxTable = (props: any) => {
+  const BlockTable = (props: any) => {
     return (
       <div className="bg-white rounded-lg shadow py-4">
         <div className="border-b text-xs font-bold pb-2 mb-4 px-4">
@@ -185,7 +187,7 @@ export default function Home() {
       </div>
       <TopBlock></TopBlock>
       <div className="grid grid-cols-2 gap-4 px-8 mt-4">
-        <BoxTable name="Latest Blocks" blocks={blocks}></BoxTable>
+        <BlockTable name="Latest Blocks" blocks={blocks}></BlockTable>
         <TransactionTable
           name="Latest Transactions"
           tnx={tnx}
